@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Collections;
 using System.Text.RegularExpressions;
 
-namespace MyLib
+namespace KlasaPudelko
 {
     public enum UnitOfMeasure
     {
@@ -19,9 +19,9 @@ namespace MyLib
 
     public sealed class Pudelko : IFormattable, IEnumerable<double>
     {
-        private const double Tolerance = 0.000000001;
+     
         private const double MaxSizeMeters = 10;
-        private const double DefaultValueCentimeters = 10;
+        private const double DefaultValueMeters = 0.1;
 
         public double A { get; }
         public double B { get; }
@@ -38,7 +38,7 @@ namespace MyLib
             return GetEnumerator();
         }
 
-        public Pudelko(double a = DefaultValueCentimeters, double b = DefaultValueCentimeters, double c = DefaultValueCentimeters, UnitOfMeasure unit = UnitOfMeasure.Centimeter)
+        public Pudelko(double a = DefaultValueMeters, double b = DefaultValueMeters, double c = DefaultValueMeters, UnitOfMeasure unit = UnitOfMeasure.Meter)
         {
             A = ConvertToMeters(a, unit);
             B = ConvertToMeters(b, unit);
@@ -51,9 +51,9 @@ namespace MyLib
         {
             return unit switch
             {
-                UnitOfMeasure.Millimeter => Math.Round(value / 1000, 3),
-                UnitOfMeasure.Centimeter => Math.Round(value / 100, 3),
-                UnitOfMeasure.Meter => Math.Round(value, 3),
+                UnitOfMeasure.Millimeter => Math.Round(value / 1000, 3, MidpointRounding.ToZero),
+                UnitOfMeasure.Centimeter => Math.Round(value / 100, 3, MidpointRounding.ToZero),
+                UnitOfMeasure.Meter => Math.Round(value, 3, MidpointRounding.ToZero),
                 _ => throw new ArgumentOutOfRangeException(nameof(unit), "Invalid unit of measure"),
             };
         }
@@ -259,11 +259,8 @@ namespace MyLib
             return new Pudelko(a, b, c, unit);
         }
 
+      
 
-
-
-
-
-
+    
     }
 }
